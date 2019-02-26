@@ -9,7 +9,7 @@
 		</style>
 	</head>
 	<body>
-		<script src="https://threejs.org/build/three.js0"></script>
+		<script src="https://threejs.org/build/three.js"></script>
 		<script>
 
             var renderer = new THREE.WebGLRenderer();
@@ -33,32 +33,12 @@
 
             var line = new THREE.Line(geometry, material);
 
-						//var othergeometry = new THREE.
-
             scene.add(line);
 
             var geometry = new THREE.BoxGeometry(1, 1, 1);
             var material = new THREE.MeshBasicMaterial({color: 0x00ffff});
             var cube = new THREE.Mesh(geometry, material);
             scene.add(cube);
-
-            var loader = new THREE.FontLoader();
-
-            loader.load('fonts/SilverPen_Regular.json', function (font)
-            {
-                var geometry = new THREE.TextGeometry('Hello three.js!',{
-                    font:font,
-                    size:80,
-                    height: 5,
-                    curveSegments: 12,
-                    bevelEnabled: true,
-                    bevelThickness: 10,
-                    bevelSize: 8,
-                    bevelSegments: 5
-                });
-            });
-
-            scene.add(loader);
 
             function animate(){
                 requestAnimationFrame(animate);
