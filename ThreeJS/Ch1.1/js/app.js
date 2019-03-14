@@ -2,6 +2,7 @@
 
 let container;
 let camera;
+let controls;
 let renderer;
 let scene;
 let mesh;
@@ -13,46 +14,87 @@ function init()
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x8FBCD4);
 
-    const fov = 35;
-    const aspect = container.clientWidth / container.clientHeight;
-    const near = 0.1;
-    const far = 100;
-    
-    camera = new THREE.PerspectiveCamera(fov,aspect,near,far);
-    camera.position.set(0, 0, 10);
+    createCamera();
+    createControls();
+    createLights();
+    createMeshes();
+    createRenderer();
 
-    const geometry = new THREE.BoxBufferGeometry(2, 2, 2);
-
-    const textureLoader = new THREE.TextureLoader();
-    const texture = textureLoader.load('textures/uv_test_bw.png');
-    texture.anisotropy = 16;
-    const material = new THREE.MeshStandardMaterial({
-        map: texture,
-    });
-
-    mesh = new THREE.Mesh(geometry, material);
-    
-    scene.add(mesh);
-    
-    const light = new THREE.DirectionalLight(0xffffff,3.0);
-    light.position.set(0,3,3);
-    scene.add(light);
-
-    renderer = new THREE.WebGLRenderer({antialias: true});
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    container.appendChild(renderer.domElement);
     renderer.setAnimationLoop( () => {
         update();
         render();    
     });
+
+}
+
+function createCamera()
+{
+    camera = new THREE.PerspectiveCamera(
+        35,                                             //FOV
+        container.clientWidth / container.clientHeight, //aspect
+        0.1,                                            // near clipping plane
+        100,                                            //far clipping plane
+    );
+    camera.position.set(-4,4,10);
+}
+
+function createControls()
+{
+    controls = new THREE.OrbitControls(camera,container);
+}
+
+function createLights()
+{
+    const ambientLight = new THREE.HemisphereLight(
+        0xddeeff,   // bright sky color
+        0x202020,   // dim ground color
+        5,          // intensity
+    );
+
+    const mainLight = new THREE.DirectionalLight(0xffffff, 5);
+    mainLight.position.set(10,10,10);
+
+    scene.add(ambientLight,mainLight);
+}
+
+function createMeshes()
+{
+    const geometry = new THREE.BoxBufferGeometry(2,2,2);
+
+    const textureLoader = new THREE.TextureLoader();
+
+    const texture = textureLoader.load('textures/uv_test_bw.png');
+
+    texture.encoding = THREE.sRGBEncoding;
+    texture.anisotropy = 16;
+
+    const material = new THREE.MeshStandardMaterial({
+        map: texture,
+    });
+
+    mesh = new THREE.Mesh(geometry,material);
+
+    scene.add(mesh);
+}
+
+function createRenderer()
+{
+    renderer = new THREE.WebGLRenderer({antialias: true});
+    renderer.setSize(container.clientWidth,container.clientHeight);
+
+    renderer.setPixelRatio(window.devicePixelRatio);
+
+    renderer.gammaFactor = 2.2;
+    renderer.gammaOutput = true;
+
+    renderer.physicallyCorrectLights = true;
+
+    container.appendChild(renderer.domElement);
 }
 
 function update()
 {
-    mesh.rotation.z += 0.01;
-    mesh.rotation.x += 0.01;
-    mesh.rotation.y += 0.01;
+
 }
 
 function render()
