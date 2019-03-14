@@ -57,24 +57,42 @@ function createLights()
     scene.add(ambientLight,mainLight);
 }
 
-function createMeshes()
+function createMaterials()
 {
-    const geometry = new THREE.BoxBufferGeometry(2,2,2);
-
-    const textureLoader = new THREE.TextureLoader();
-
-    const texture = textureLoader.load('textures/uv_test_bw.png');
-
-    texture.encoding = THREE.sRGBEncoding;
-    texture.anisotropy = 16;
-
-    const material = new THREE.MeshStandardMaterial({
-        map: texture,
+    const body = new THREE.MeshStandardMaterial({
+        color: 0xff3333, // red
+        flatShading: true,
     });
 
-    mesh = new THREE.Mesh(geometry,material);
+    // just as with textures, we need to put colors into linear color space
+    body.color.convertSRGBToLinear();
 
-    scene.add(mesh);
+    const detail = new THREE.MeshStandardMaterial({
+        color: 0x333333, // darkgrey
+        flatShading: true,
+    });
+
+    detail.color.convertSRGBToLinear();
+
+    return{
+        body,
+        detail,
+    };
+}
+
+function createGeometries()
+{
+
+}
+
+function createMeshes()
+{
+    // create a Group to hold the pieces of the train
+    const train = new THREE.Group();
+    scene.add( train );
+
+    const materials = createMaterials();
+    const geometries = createGeometries();
 }
 
 function createRenderer()
