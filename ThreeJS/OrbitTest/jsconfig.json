@@ -1,8 +1,7 @@
 {
     "typeAcquisition": {
         "include": [
-            "three",
-            "OrbitControls"
+            "three"
         ]
     }
 }

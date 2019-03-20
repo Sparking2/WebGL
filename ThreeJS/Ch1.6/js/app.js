@@ -1,7 +1,5 @@
 // Just waiting for your beautiful creation
 
-//import * as THREE from 'three';
-
 let container;
 let camera;
 let controls;
