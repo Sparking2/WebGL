@@ -1,8 +1,6 @@
 var camera, scene, renderer;
 var geometry, material, mesh;
-
-init();
-animate();
+var controls;
 
 function init() {
 
@@ -21,6 +19,7 @@ function init() {
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	document.body.appendChild( renderer.domElement );
 
+	createControls();
 }
 
 function animate() {
@@ -31,5 +30,19 @@ function animate() {
 	mesh.rotation.y += 0.02;
 
 	renderer.render( scene, camera );
-
 }
+
+function createControls(){
+	controls =  new THREE.OrbitControls(camera);
+}
+
+function onWindowResize(){
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+	renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+window.addEventListener('resize', onWindowResize);
+
+init();
+animate();

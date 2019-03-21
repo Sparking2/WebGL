@@ -1,15 +1,12 @@
-// Just waiting for your beautiful creation
-
 let container;
 let camera;
 let controls;
 let renderer;
 let scene;
-let mesh;
 
 function init() {
 
-  container = document.querySelector( '#container' );
+  container = document.querySelector( '#scene-container' );
 
   scene = new THREE.Scene();
   scene.background = new THREE.Color( 0x8FBCD4 );
@@ -30,26 +27,21 @@ function init() {
 }
 
 function createCamera() {
-    camera = new THREE.PerspectiveCamera(
-        35,                                             //FOV
-        container.clientWidth / container.clientHeight, //aspect
-        0.1,                                            // near clipping plane
-        100,                                            //far clipping plane
-    );
-    camera.position.set(-5,5,7);
+
+  camera = new THREE.PerspectiveCamera( 35, container.clientWidth / container.clientHeight, 0.1, 100 );
+  camera.position.set( -5, 5, 7 );
+
 }
 
 function createControls() {
-  controls = new THREE.OrbitControls( camera );
+
+  controls = new THREE.OrbitControls( camera, container );
+
 }
 
 function createLights() {
 
-    const ambientLight = new THREE.HemisphereLight(
-        0xddeeff,   // bright sky color
-        0x202020,   // dim ground color
-        5,          // intensity
-    );
+  const ambientLight = new THREE.HemisphereLight( 0xddeeff, 0x0f0e0d, 5 );
 
   const mainLight = new THREE.DirectionalLight( 0xffffff, 5 );
   mainLight.position.set( 10, 10, 10 );
